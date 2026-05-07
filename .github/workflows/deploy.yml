@@ -1,10 +1,11 @@
 name: 自动构建并部署到虚拟主机
 
+#on:
+#  push:
+#    branches: [ master ]
+#  workflow_dispatch:
 on:
-  push:
-    branches: [ master ]
   workflow_dispatch:
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
