@@ -1,11 +1,8 @@
-name: 自动构建并部署到虚拟主机
+name: 自动构建并智能部署到虚拟主机
 
-#on:
-#  push:
-#    branches: [ master ]
-#  workflow_dispatch:
 on:
   workflow_dispatch:
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -28,15 +25,16 @@ jobs:
       - name: 构建生成静态文件
         run: pnpm build
 
-      - name: 把 index.php 复制到 dist
+      - name: 复制 index.php 到 dist
         run: cp public/index.php dist/
 
-      - name: 通过 FTP 上传到虚拟主机
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
-          server-dir: /wwwroot/
-          dangerous-clean-slate: true
+      - name: 通过 lftp 增量上传
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y lftp
+          lftp -e "
+            set ftp:ssl-allow no;
+            open ftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_HOST }};
+            mirror --reverse --delete --verbose --parallel=10 --ignore-time --exclude .htaccess ./dist/ /wwwroot/;
+            quit;
+          "
