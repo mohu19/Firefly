@@ -1,6 +1,6 @@
 # 欢迎
 
-大家好，这里是**星荧墨狐** 其实可以直接叫墨狐也无妨     
+大家好，这里是**星荧墨狐** 也可以直接叫墨狐   
 ## 以下是部分个人主页   
 >- **bilibili**:https://space.bilibili.com/363683177
 >- **steam**:https://steamcommunity.com/profiles/76561198981894916/
